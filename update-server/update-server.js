@@ -79,6 +79,28 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// latest.yml endpoint for electron-updater
+app.get('/latest.yml', async (req, res) => {
+  try {
+    const latestVersion = await getLatestVersion();
+    
+    if (!latestVersion) {
+      return res.status(404).send('No updates available');
+    }
+
+    const yaml = `version: ${latestVersion.version}
+path: ${latestVersion.path.replace('/updates/', '')}
+sha512: ${latestVersion.sha512}
+releaseDate: '${latestVersion.releaseDate}'`;
+
+    res.set('Content-Type', 'text/yaml');
+    res.send(yaml);
+  } catch (err) {
+    console.error('Error generating latest.yml:', err);
+    res.status(500).send('Internal server error');
+  }
+});
+
 // Update endpoint for auto-updater
 app.get('/update/:platform/:version', async (req, res) => {
   const { platform, version } = req.params;
