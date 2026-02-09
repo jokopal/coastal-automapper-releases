@@ -1,0 +1,137 @@
+# BlueMap – Coastal AutoMapper
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18428003.svg)](https://doi.org/10.5281/zenodo.18428003)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub release](https://img.shields.io/github/v/release/jokopal/CoastalAutoMapper)](https://github.com/jokopal/CoastalAutoMapper/releases)
+
+BlueMap adalah aplikasi desktop untuk pemetaan pesisir (coastal mapping) yang memadukan:
+
+- Backend ilmiah berbasis **FastAPI (Python)** untuk memproses raster & vektor geospasial.
+- Frontend **React + Vite** untuk antarmuka analisis dan visualisasi.
+- Shell **Electron** dengan titlebar kustom agar dapat berjalan sebagai aplikasi desktop modern.
+
+Aplikasi ini dirancang untuk workflow:
+
+1. Mengimpor citra (GeoTIFF) dan data vektor (shapefile) ke dalam **Data Hub**.
+2. Menjalankan modul pemrosesan:
+   - Koreksi sunglint (**Hedley**).
+   - Koreksi kolom air (**Lyzenga DII**, single & stacked).
+   - Masking raster dengan shapefile.
+   - Modeling (klasifikasi & regresi) dengan Random Forest / SVM.
+   - Analisis time-series (class area & raster stats).
+   - Accuracy assessment (confusion matrix, OA, Kappa, dsb.).
+3. Menyimpan dan me-*restore* keadaan project (daftar raster & vektor terdaftar) melalui
+   fitur **Project Export/Import**.
+
+Untuk detail arsitektur backend, aturan `kind` raster per modul, dan peta kode lengkap,
+lihat dokumen:
+
+- `Architecture.md`
+
+---
+
+## 1. Struktur Proyek Singkat
+
+- `backend/` – kode FastAPI, registry raster/vector, dan modul ilmiah.
+- `frontend/coastal-mapper/` – SPA React/Vite (UI utama, 3-panel layout + titlebar).
+- `electron/` – main process & preload Electron (menjalankan backend dan frontend).
+- `docsscripts/` – dokumentasi teknis untuk maintainer (tidak wajib untuk runtime).
+- `docsscripts/legacy/` – arsip komponen lama yang tidak dipakai dalam flow utama.
+
+---
+
+## 2. Menjalankan Aplikasi (Mode Produksi Lokal)
+
+### 2.1. Prasyarat
+
+- Python 3.10+ (untuk backend, jika dijalankan terpisah).
+- Node.js 18+ (untuk build frontend & menjalankan Electron).
+
+> Catatan: Dalam pengembangan normal, backend akan dijalankan otomatis oleh
+> proses Electron. Anda hanya perlu memastikan dependency sudah ter-*install*.
+
+### 2.2. Build Frontend
+
+Dari folder `frontend/coastal-mapper/`:
+
+```bash
+npm install        # hanya sekali, atau saat dependency berubah
+npm run build      # membangun bundel Vite ke folder dist/
+```
+
+### 2.3. Menjalankan Electron App
+
+Dari folder `electron/`:
+
+```bash
+npm install        # hanya sekali, atau saat dependency Electron berubah
+npm start          # menjalankan aplikasi desktop BlueMap
+```
+
+Electron akan:
+
+1. Menjalankan backend FastAPI (Uvicorn) di `http://127.0.0.1:8765`.
+2. Menunggu sampai backend siap (`/api/health`).
+3. Memuat frontend build dari `frontend/coastal-mapper/dist`.
+
+> Penting: Jalankan aplikasi dari **Electron**, bukan melalui browser langsung.
+> Jika Anda membuka `http://127.0.0.1:8765` di browser, titlebar kustom tetap
+> terlihat tetapi kontrol jendela (minimize/maximize/close) tidak berfungsi
+> karena `window.electronAPI` hanya tersedia di konteks Electron.
+
+---
+
+## 3. Fitur Utama
+
+- **Data Hub** untuk manajemen raster & vektor dengan registry terpusat.
+- **Koreksi & transformasi** (Hedley, Lyzenga DII, masking).
+- **Modeling** (klasifikasi/regresi) dengan diagnostik OOB/RMSE opsional.
+- **Analisis multi-tanggal** dan pembuatan laporan timeseries.
+- **Accuracy assessment** (single & batch) terhadap shapefile validasi.
+- **Project Export/Import** untuk menyimpan keadaan sesi kerja.
+- **Titlebar kustom** yang terintegrasi dengan Electron (window controls,
+  menu File/Edit/View/Tools/Help).
+
+---
+
+## 4. Citation & Academic Use
+
+If you use BlueMap in your research, please cite:
+
+```bibtex
+@software{jokopal_bluemap_2026,
+  author = {Jokopal},
+  title = {BlueMap: Coastal AutoMapper},
+  version = {1.0.0-beta},
+  year = {2026},
+  publisher = {Zenodo},
+  doi = {10.5281/zenodo.18428003},
+  url = {https://doi.org/10.5281/zenodo.18428003}
+}
+```
+
+**APA Format:**
+> Jokopal. (2026). *BlueMap: Coastal AutoMapper* (Version 1.0.0-beta) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.18428003
+
+For complete user guide and documentation, see [BlueMap_User_Guide.md](BlueMap_User_Guide.md).
+
+---
+
+## 5. Catatan Versi & Kesiapan Produksi
+
+Versi ini dimaksudkan sebagai **baseline v1** dengan karakteristik:
+
+- Fokus pada skenario **desktop single-user** dengan satu proses backend.
+- Dirancang untuk ukuran raster umum citra satelit (Sentinel-2, dsb.).
+- Mengandalkan registry raster/vector global yang aman dipakai selama
+  backend tidak dijalankan dengan banyak worker paralel.
+
+Risiko & batasan utama (ringkas):
+
+- Jangan menjalankan backend FastAPI dengan banyak worker (`--workers > 1`)
+  pada direktori `static/` yang sama.
+- Project import mengasumsikan file GeoTIFF/SHP **masih ada** di path yang
+  sama seperti saat diekspor.
+
+Detail teknis lengkap dan panduan menambah modul pemrosesan baru dapat
+ditemukan di `Architecture.md`.
