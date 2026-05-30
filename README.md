@@ -2,7 +2,7 @@
 
 **A scientific desktop application for shallow-water benthic habitat mapping from multispectral remote sensing imagery.**
 
-Version 2.0.0 | Windows x64 | Signed installer
+Version 2.0.0 | Windows x64 | Signed installer | Developed by Jokopal
 
 ---
 
@@ -15,16 +15,14 @@ Sentinel-2 and Landsat). It packages the standard scientific processing chain
 into a single guided interface so that a non-programmer analyst can move from a
 raw multispectral image to a validated habitat map with documented provenance.
 
-The application operationalises the Indonesian national technical guideline
-**"Panduan Teknis Survei dan Pemetaan Habitat Perairan Laut Dangkal
-Menggunakan Citra Penginderaan Jauh dan Klasifikasi Machine Learning"**
-(Blue Carbon Research Group, Universitas Gadjah Mada and PT. Mitra Geotama
-Indonesia, 2023) from preprocessing through multi-temporal analysis. Every HTML
-report produced by the application cites this guideline plus the underlying
-peer-reviewed method papers.
+The workflow follows established remote-sensing methods for shallow-water
+habitat mapping. Each processing run produces an HTML report that lists the
+references relevant to the step that was run, so results stay traceable to
+their methods. The reference list is shown at the end of this file.
 
 This repository distributes the **compiled, code-signed installer only**. The
-source code lives in a separate repository.
+source code lives in a separate repository. The application is developed and
+maintained by **Jokopal**.
 
 ---
 
@@ -118,20 +116,46 @@ analysis backend. Subsequent launches are faster.
 
 ---
 
+## Credits
+
+BlueMap Coastal AutoMapper is developed and maintained by **Jokopal**
+(https://github.com/jokopal).
+
+---
+
 ## How to cite
 
-If you use BlueMap Coastal AutoMapper in published work, cite the software and
-the technical guideline it implements:
+If you use BlueMap Coastal AutoMapper in published work, cite the software
+(developer: Jokopal) together with the references relevant to the steps you
+ran. Each report lists its own references; the full set is below.
 
-> Harahap, S. D., Firdausman, F., Wijaya, J., Wicaksono, P., and Ardiyanto, R.
-> (2023). Panduan Teknis Survei dan Pemetaan Habitat Perairan Laut Dangkal
-> Menggunakan Citra Penginderaan Jauh dan Klasifikasi Machine Learning
-> (Edisi 1). Blue Carbon Research Group, Fakultas Geografi, Universitas Gadjah
-> Mada and PT. Mitra Geotama Indonesia, Yogyakarta.
+## References
 
-Also cite the relevant method papers shown in each report (Hedley et al. 2005;
-Lyzenga 1978, 1981; Breiman 2001; Cortes and Vapnik 1995; Congalton 1991;
-Cleveland et al. 1990).
+The methods used across the modules draw on the following sources. Cite the
+ones that apply to your workflow.
+
+- Hedley, J. D., Harborne, A. R., and Mumby, P. J. (2005). Simple and robust
+  removal of sun glint for mapping shallow-water benthos. International Journal
+  of Remote Sensing, 26(10).
+- Lyzenga, D. R. (1978). Passive remote sensing techniques for mapping water
+  depth and bottom features. Applied Optics, 17(3).
+- Lyzenga, D. R. (1981). Remote sensing of bottom reflectance and water
+  attenuation parameters in shallow water using aircraft and Landsat data.
+  International Journal of Remote Sensing, 2(1).
+- Breiman, L. (2001). Random forests. Machine Learning, 45(1).
+- Cortes, C., and Vapnik, V. (1995). Support-vector networks. Machine
+  Learning, 20.
+- Congalton, R. G. (1991). A review of assessing the accuracy of
+  classifications of remotely sensed data. Remote Sensing of Environment,
+  37(1).
+- Cleveland, R. B., Cleveland, W. S., McRae, J. E., and Terpenning, I. (1990).
+  STL: a seasonal-trend decomposition procedure based on loess. Journal of
+  Official Statistics, 6(1).
+- Harahap, S. D., Firdausman, F., Wijaya, J., Wicaksono, P., and Ardiyanto, R.
+  (2023). Panduan Teknis Survei dan Pemetaan Habitat Perairan Laut Dangkal
+  Menggunakan Citra Penginderaan Jauh dan Klasifikasi Machine Learning
+  (Edisi 1). Blue Carbon Research Group, Universitas Gadjah Mada and PT. Mitra
+  Geotama Indonesia, Yogyakarta.
 
 ---
 

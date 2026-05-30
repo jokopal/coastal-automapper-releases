@@ -1,8 +1,8 @@
 # BlueMap Coastal AutoMapper: Brief Guide Book
 
 This guide walks through installing the application and running a complete
-shallow-water habitat mapping workflow. It mirrors the structure of the
-technical guideline the application implements.
+shallow-water habitat mapping workflow. BlueMap Coastal AutoMapper is developed
+and maintained by Jokopal.
 
 ---
 
@@ -79,8 +79,8 @@ the workflow immediately.
 ### Stage 3: Training data
 
 Prepare a training vector (polygons or points) labelled with habitat classes.
-The application integrates field-survey labels with the image grid as described
-in the guideline.
+The application integrates field-survey labels with the image grid using
+standard remote-sensing practice.
 
 ### Stage 4: Classification or regression
 
@@ -120,7 +120,7 @@ button on the result card. Each report contains:
 - **Diagnostic figures:** confusion matrix, scatter plots, and similar.
 - **Provenance and reproducibility:** predictor bands, random seed,
   scikit-learn version, and input identifiers.
-- **Citations:** the technical guideline chapter and the method papers to cite.
+- **References:** the references relevant to the step that produced the report.
 
 To reproduce a run, use the same inputs, the same predictor bands, and the same
 random seed on the same software version.
@@ -142,5 +142,6 @@ random seed on the same software version.
 Report issues with the contents of
 `%APPDATA%\bluemap-electron\logs\last-startup-failure.json` when relevant.
 
-When you publish results, cite the software and the technical guideline (see
-README.md, section "How to cite").
+When you publish results, cite the software (developer: Jokopal) and the
+references relevant to your workflow. The full reference list is in README.md,
+section "References".
