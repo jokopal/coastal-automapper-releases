@@ -1,4 +1,8 @@
-version: 1.0.1
-path: BlueMap-Setup-1.0.1.exe
-sha512: b514cec8c554b057aa44c8231248d3478ed6ca9f5a1725f100ecf3e36613b0671ee01e9fe5aaf8e741e604311b7f0870d39b50458b2738a531428a408a406671
-releaseDate: '2026-01-31T00:00:00Z'
+version: 2.0.0
+files:
+  - url: BlueMap-Setup-2.0.0.exe
+    sha512: BFF31ShZw4+NyBoJBVQ+s0HE3/yyuOOIg5sEAIeDvSLxfcctje8Hcw5kumQb3bOL4KeRlQqyGUZZmgPzMtqphw==
+    size: 448362712
+path: BlueMap-Setup-2.0.0.exe
+sha512: BFF31ShZw4+NyBoJBVQ+s0HE3/yyuOOIg5sEAIeDvSLxfcctje8Hcw5kumQb3bOL4KeRlQqyGUZZmgPzMtqphw==
+releaseDate: '2026-05-30T06:11:49.201Z'

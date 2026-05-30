@@ -1,72 +1,140 @@
-# CoastalAutoMapper Releases
+# BlueMap Coastal AutoMapper
 
-## 📦 Installation
+**A scientific desktop application for shallow-water benthic habitat mapping from multispectral remote sensing imagery.**
 
-### Method 1: Direct Download
-1. Download latest installer from [Releases](https://github.com/your-org/coastal-automapper-releases/releases)
-2. Run `BlueMap-Setup-1.0.0.exe`
-3. Follow installation wizard
+Version 2.0.0 | Windows x64 | Signed installer
 
-### Method 2: Auto-updater
-1. Install any version of BlueMap
-2. Set environment variable: `BLUEMAP_AUTO_UPDATE=1`
-3. Launch application - will auto-check for updates
+---
 
-## 🔄 Auto-updater Configuration
+## What this application is
 
-### Enable Auto-updater
-```bash
-# Method 1: Environment Variable
-set BLUEMAP_AUTO_UPDATE=1
-BlueMap.exe
+BlueMap Coastal AutoMapper is an offline-first desktop GIS that implements a
+complete, reproducible workflow for mapping coral reef, seagrass, and other
+shallow-water benthic habitats from optical satellite imagery (for example
+Sentinel-2 and Landsat). It packages the standard scientific processing chain
+into a single guided interface so that a non-programmer analyst can move from a
+raw multispectral image to a validated habitat map with documented provenance.
 
-# Method 2: System-wide (Recommended)
-# Add to Windows Environment Variables
-BLUEMAP_AUTO_UPDATE=1
-```
+The application operationalises the Indonesian national technical guideline
+**"Panduan Teknis Survei dan Pemetaan Habitat Perairan Laut Dangkal
+Menggunakan Citra Penginderaan Jauh dan Klasifikasi Machine Learning"**
+(Blue Carbon Research Group, Universitas Gadjah Mada and PT. Mitra Geotama
+Indonesia, 2023) from preprocessing through multi-temporal analysis. Every HTML
+report produced by the application cites this guideline plus the underlying
+peer-reviewed method papers.
 
-### Disable Auto-updater
-```bash
-set BLUEMAP_AUTO_UPDATE=0
-# or simply don't set the variable
-```
+This repository distributes the **compiled, code-signed installer only**. The
+source code lives in a separate repository.
 
-## 📋 Version History
+---
 
-| Version | Release Date | Changelog | Download |
-|---------|--------------|-----------|----------|
-| 1.0.0 | 2026-01-31 | Initial release with auto-updater | [Download](updates/BlueMap-Setup-1.0.0.exe) |
+## Scientific workflow and modules
 
-## 🛠️ Development
+The application is organised around the published mapping workflow. Each stage
+maps to a chapter of the technical guideline.
 
-### Build New Release
-```bash
-cd ../CoastalAutoMapper/electron
-npm run release
-```
+### 1. Image preprocessing
+- **Sunglint correction (Hedley module).** Removes specular reflection from the
+  water surface using the near-infrared regression method of Hedley, Harborne
+  and Mumby (2005). Guideline Bab I.2.
+- **Water column correction (Lyzenga module).** Computes depth-invariant
+  indices (DII) from band pairs following Lyzenga (1978, 1981), producing a
+  three-band depth-invariant stack from blue, green, and red bands. Guideline
+  Bab I.3.
 
-### Deploy Update Server
-```bash
-cd update-server
-npm install
-node update-server.js
-```
+### 2. Supervised modeling
+- **Classification.** Random Forest (Breiman 2001) and Support Vector Machine
+  (Cortes and Vapnik 1995), with single-image and batch modes. Guideline
+  Bab III.2.
+- **Regression.** Random Forest regression and Support Vector Regression for
+  continuous targets such as percent cover or depth proxies.
+- **Predictor band selection.** The analyst can choose exactly which raster
+  bands feed the model as predictors, with full traceability of the choice in
+  the report.
+- **Assembly model.** Train a reusable model bundle once and apply it to other
+  images. The bundle records the exact predictor bands so inference always uses
+  the same spectral inputs.
 
-## 📊 Repository Structure
+### 3. Accuracy assessment
+- Confusion matrix, overall accuracy, producer and user accuracy, and Cohen
+  kappa following Congalton (1991), with bootstrap confidence intervals.
+  Guideline Bab III.3.
 
-```
-coastal-automapper-releases/
-├── update-server/          # Update server files
-│   ├── updates/            # Large installers (LFS)
-│   └── update-server.js    # Node.js server
-├── version.json            # Version tracking
-├── scripts/                # Build automation
-└── docs/                   # Documentation
-```
+### 4. Multi-temporal analysis
+- Class-area tables, mean and coefficient-of-variation maps, change detection,
+  and seasonal-trend decomposition (STL, Cleveland et al. 1990). Guideline
+  Bab IV.
 
-## 🔒 Security
+Every processing run writes a self-contained HTML report with a standardised
+structure: configuration, metrics, diagnostic figures, a provenance and
+reproducibility section (predictor bands, random seed, scikit-learn version,
+input identifiers), and the citations described above.
 
-- All installers include SHA512 checksums
-- Auto-updater validates file integrity before installation
-- Updates can be disabled via environment variable
-- No forced updates in development mode
+---
+
+## Key properties for scientific use
+
+- **Reproducibility.** Random seeds are propagated and recorded. Reports list
+  the exact inputs and software versions used for each run.
+- **Provenance.** Output GeoTIFFs carry processing tags. Model bundles record
+  their predictor band selection.
+- **Offline-first.** No network connection is required for any analysis step.
+- **No silent data reduction.** Models train on the full set of labelled
+  pixels. The application never discards training data without explicit user
+  action.
+- **Documented citations.** Each report names the methods and guideline to cite
+  in published work.
+
+---
+
+## Installation
+
+See **GUIDE.md** for the full step-by-step guide. In brief:
+
+1. Download `BlueMap-Setup-2.0.0.exe`.
+2. Double-click to install. The installer is digitally signed. If Windows
+   SmartScreen shows an "unknown publisher" notice, choose "More info" then
+   "Run anyway", or trust the bundled publisher certificate first (see
+   GUIDE.md).
+3. Launch BlueMap from the Start menu.
+
+The first launch can take 30 to 60 seconds while Windows scans the bundled
+analysis backend. Subsequent launches are faster.
+
+---
+
+## Files in this repository
+
+| File | Purpose |
+|---|---|
+| `BlueMap-Setup-2.0.0.exe` | The signed Windows installer (Git LFS). |
+| `BlueMap-Setup-2.0.0.exe.blockmap` | Differential map used by the auto-updater. |
+| `BlueMap-CodeSigning.cer` | Public certificate of the publisher. Safe to share. |
+| `trust-cert.ps1` | Helper that trusts the publisher certificate on a machine. |
+| `latest.yml` | Auto-update metadata. |
+| `version.json` | Human-readable version metadata and changelog. |
+| `README.md` | This file. |
+| `GUIDE.md` | Brief guide book and workflow walkthrough. |
+
+---
+
+## How to cite
+
+If you use BlueMap Coastal AutoMapper in published work, cite the software and
+the technical guideline it implements:
+
+> Harahap, S. D., Firdausman, F., Wijaya, J., Wicaksono, P., and Ardiyanto, R.
+> (2023). Panduan Teknis Survei dan Pemetaan Habitat Perairan Laut Dangkal
+> Menggunakan Citra Penginderaan Jauh dan Klasifikasi Machine Learning
+> (Edisi 1). Blue Carbon Research Group, Fakultas Geografi, Universitas Gadjah
+> Mada and PT. Mitra Geotama Indonesia, Yogyakarta.
+
+Also cite the relevant method papers shown in each report (Hedley et al. 2005;
+Lyzenga 1978, 1981; Breiman 2001; Cortes and Vapnik 1995; Congalton 1991;
+Cleveland et al. 1990).
+
+---
+
+## License
+
+The compiled application is distributed under the MIT License.
