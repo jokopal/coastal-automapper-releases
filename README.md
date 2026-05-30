@@ -129,6 +129,14 @@ If you use BlueMap Coastal AutoMapper in published work, cite the software
 (developer: Jokopal) together with the references relevant to the steps you
 ran. Each report lists its own references; the full set is below.
 
+Software citation (version 2.0.0):
+
+> Gulo, M. J., and Benyamin, K. (2026). BlueMap: Coastal AutoMapper - Desktop
+> Application for Shallow Benthic Habitat Mapping (Version 2.0.0) [Computer
+> software]. Zenodo. https://doi.org/10.5281/zenodo.20457262
+
+DOI: https://doi.org/10.5281/zenodo.20457262
+
 ## References
 
 The methods used across the modules draw on the following sources. Cite the
